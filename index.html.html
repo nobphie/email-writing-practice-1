@@ -1,0 +1,820 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airmail — Writing an email about a trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --sky:#0E5468;
+    --sky-deep:#083D4D;
+    --paper:#FFFBF2;
+    --ink:#10222E;
+    --ink-soft:#3D5765;
+    --red:#D2352C;
+    --blue:#2B5FA8;
+    --gold:#F2A93B;
+    --green:#12784B;
+    --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+    --letter:"Newsreader",Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    padding:0 0 80px;
+    background:var(--sky);
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 26px, transparent 26px 52px);
+    color:var(--paper);
+    font-family:var(--display);
+    font-size:19px;
+    line-height:1.55;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ---------- header ---------- */
+  header{padding:44px 0 8px}
+  .eyebrow{
+    font-size:clamp(15px,1.6vw,19px);letter-spacing:.22em;text-transform:uppercase;
+    font-weight:700;color:var(--gold)
+  }
+  h1{
+    font-family:var(--display);
+    font-size:clamp(38px,6.4vw,68px);
+    line-height:1.02;margin:.15em 0 .1em;font-weight:800;letter-spacing:-.02em
+  }
+  .sub{font-size:clamp(19px,2.2vw,26px);color:#CFE6EE;max-width:44ch;margin:0}
+
+  /* ---------- panels ---------- */
+  .panel{
+    background:var(--paper);color:var(--ink);
+    border-radius:10px;padding:26px 28px;margin:26px 0;
+    box-shadow:0 14px 0 rgba(0,0,0,.16)
+  }
+  .panel h2{
+    font-size:clamp(24px,2.8vw,32px);margin:0 0 10px;font-weight:800;letter-spacing:-.01em
+  }
+  .panel p,.panel li{font-size:clamp(19px,2vw,23px)}
+  .brief ul{margin:12px 0 0;padding-left:1.1em}
+  .brief li{margin:6px 0}
+  .target{
+    display:inline-block;margin-top:14px;background:var(--ink);color:var(--paper);
+    padding:8px 16px;border-radius:999px;font-weight:700;font-size:19px
+  }
+
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin:26px 0}
+  .rule{
+    background:var(--paper);color:var(--ink);border-radius:10px;padding:20px 22px;
+    border-top:12px solid var(--blue);box-shadow:0 10px 0 rgba(0,0,0,.16)
+  }
+  .rule:nth-child(2){border-top-color:var(--red)}
+  .rule:nth-child(3){border-top-color:var(--gold)}
+  .rule h3{margin:0 0 6px;font-size:clamp(21px,2.2vw,25px);font-weight:800}
+  .rule .form{font-family:var(--letter);font-style:italic;font-size:21px;color:var(--ink-soft);margin:0 0 8px}
+  .rule p{margin:0;font-size:20px}
+  .rule .eg{margin-top:10px;font-family:var(--letter);font-size:21px;background:#F0EAD9;padding:8px 12px;border-radius:6px}
+
+  /* ---------- step marker ---------- */
+  .step{display:flex;align-items:baseline;gap:14px;margin:44px 0 0}
+  .step .num{
+    font-size:clamp(30px,4vw,46px);font-weight:800;color:var(--gold);line-height:1
+  }
+  .step h2{font-size:clamp(26px,3.4vw,40px);margin:0;font-weight:800;letter-spacing:-.02em}
+  .step-note{margin:6px 0 0;font-size:clamp(18px,2vw,22px);color:#CFE6EE;max-width:60ch}
+
+  /* ---------- envelope / letter ---------- */
+  .airmail{
+    padding:12px;border-radius:10px;margin:18px 0 0;
+    background:repeating-linear-gradient(45deg,
+      var(--red) 0 20px, var(--paper) 20px 40px,
+      var(--blue) 40px 60px, var(--paper) 60px 80px);
+    box-shadow:0 16px 0 rgba(0,0,0,.18)
+  }
+  .letter{
+    position:relative;background:var(--paper);color:var(--ink);
+    border-radius:4px;padding:34px 34px 30px;
+    font-family:var(--letter);
+    font-size:clamp(22px,2.5vw,29px);
+    line-height:2.05
+  }
+  .letter p{margin:0 0 18px}
+  .letter .sign{margin-bottom:0}
+
+  /* postage stamp = progress */
+  .stamp{
+    position:absolute;top:22px;right:26px;width:112px;height:138px;
+    border:4px dashed var(--ink);border-radius:4px;background:#F0EAD9;
+    transform:rotate(4deg);overflow:hidden;
+    font-family:var(--display)
+  }
+  .stamp-fill{
+    position:absolute;left:0;right:0;bottom:0;height:0%;
+    background:linear-gradient(180deg,var(--gold),var(--red));
+    transition:height .45s cubic-bezier(.2,.8,.3,1)
+  }
+  .stamp-txt{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;
+    color:var(--ink);font-weight:800;text-align:center
+  }
+  .stamp-txt .big{font-size:30px;line-height:1}
+  .stamp-txt .small{font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  @media (max-width:640px){ .stamp{position:static;margin:0 0 16px auto} }
+
+  /* gaps */
+  .gap{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  input.blank{
+    font-family:var(--letter);font-size:inherit;font-weight:600;color:var(--ink);
+    background:#FDF3DC;border:0;border-bottom:4px solid var(--ink-soft);
+    padding:2px 8px;border-radius:4px 4px 0 0;min-width:8.5ch;
+    transition:background .2s,border-color .2s
+  }
+  input.blank:focus{outline:4px solid var(--gold);outline-offset:2px;background:#fff}
+  input.blank.ok{background:#DFF2E6;border-bottom-color:var(--green)}
+  input.blank.no{background:#FBE0DE;border-bottom-color:var(--red)}
+  .cue{font-style:italic;color:var(--ink-soft);font-size:.82em}
+  .mark{font-family:var(--display);font-weight:800;font-size:.9em;width:1.2em;display:inline-block}
+  .mark.ok{color:var(--green)}
+  .mark.no{color:var(--red)}
+  .why{
+    border:0;background:var(--blue);color:#fff;font-family:var(--display);font-weight:800;
+    width:1.55em;height:1.55em;border-radius:50%;font-size:.66em;cursor:pointer;line-height:1;padding:0
+  }
+  .why:hover{background:var(--ink)}
+  .why:focus-visible{outline:4px solid var(--gold);outline-offset:2px}
+
+  /* fill-your-own slots */
+  input.slot{
+    font-family:var(--letter);font-size:inherit;color:var(--ink);
+    background:#EAF3F6;border:0;border-bottom:4px solid var(--blue);
+    padding:2px 10px;border-radius:4px 4px 0 0;min-width:9ch;
+    transition:background .2s
+  }
+  input.slot::placeholder{color:#7C8E99;font-style:italic}
+  input.slot:focus{outline:4px solid var(--gold);outline-offset:2px;background:#fff}
+  input.slot.no{background:#FBE0DE;border-bottom-color:var(--red)}
+  input.slot.warn{background:#FCF0D6;border-bottom-color:var(--gold)}
+  .mark.warn{color:#9A6000}
+
+  .report{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+  .report li{
+    background:var(--paper);color:var(--ink);border-radius:8px;
+    padding:14px 18px;font-size:clamp(18px,2vw,22px);
+    border-left:12px solid var(--red);cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.16)
+  }
+  .report li.warn{border-left-color:var(--gold)}
+  .report li:hover{background:#fff}
+  .report li:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+  .report li b{font-family:var(--display);font-weight:800}
+
+  /* ---------- bars ---------- */
+  .bar{
+    display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+    margin:18px 0 0;padding:18px 22px;border-radius:10px;
+    background:var(--sky-deep);box-shadow:0 10px 0 rgba(0,0,0,.16)
+  }
+  .btn{
+    font-family:var(--display);font-weight:800;font-size:clamp(19px,2vw,23px);
+    border:0;border-radius:999px;padding:14px 28px;cursor:pointer;
+    background:var(--gold);color:var(--ink);box-shadow:0 5px 0 #B87C15;transition:transform .1s
+  }
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #B87C15}
+  .btn:focus-visible{outline:4px solid #fff;outline-offset:3px}
+  .btn.ghost{background:transparent;color:var(--paper);box-shadow:inset 0 0 0 3px rgba(255,255,255,.5)}
+  .btn.send{background:var(--red);color:#fff;box-shadow:0 5px 0 #8F1F19;font-size:clamp(21px,2.4vw,27px)}
+  .btn.send:active{box-shadow:0 1px 0 #8F1F19}
+  .btn[disabled]{opacity:.42;cursor:not-allowed}
+  .status{font-size:clamp(19px,2vw,23px);font-weight:700}
+  .status.ok{color:#8FE3B4}
+  .count{font-size:clamp(19px,2vw,23px);font-weight:700;color:var(--gold)}
+  .count.in{color:#8FE3B4}
+
+  .coach{
+    margin:16px 0 0;padding:18px 22px;border-radius:10px;
+    background:#FDF3DC;color:var(--ink);border-left:12px solid var(--gold);
+    font-size:clamp(19px,2.1vw,24px);min-height:1em
+  }
+  .coach.ok{background:#DFF2E6;border-left-color:var(--green)}
+  .coach.no{background:#FBE0DE;border-left-color:var(--red)}
+
+  /* ---------- send animation ---------- */
+  #stage{
+    position:fixed;inset:0;background:rgba(8,61,77,.96);z-index:50;
+    display:none;align-items:center;justify-content:center;flex-direction:column;
+    perspective:1200px;padding:20px;text-align:center
+  }
+  #stage.on{display:flex}
+  .env-fly{transition:none}
+  .env-fly.fly{animation:fly 1.5s cubic-bezier(.45,0,.85,.35) forwards}
+  @keyframes fly{
+    30%{transform:translateY(24px) rotate(-3deg)}
+    100%{transform:translate(48vw,-105vh) rotate(24deg) scale(.22);opacity:0}
+  }
+  .env{
+    position:relative;width:min(520px,86vw);aspect-ratio:3/2;
+    background:var(--paper);border-radius:8px;
+    box-shadow:0 24px 50px rgba(0,0,0,.45);transform-style:preserve-3d
+  }
+  .env-air{
+    position:absolute;inset:0;border-radius:8px;padding:11px;
+    background:repeating-linear-gradient(45deg,
+      var(--red) 0 18px, var(--paper) 18px 36px,
+      var(--blue) 36px 54px, var(--paper) 54px 72px)
+  }
+  .env-face{
+    position:absolute;inset:11px;background:var(--paper);border-radius:3px;
+    display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;
+    padding:20px 24px;text-align:left
+  }
+  .env-face .to{font-family:var(--letter);font-size:clamp(20px,3vw,28px);color:var(--ink)}
+  .env-face .to b{display:block;font-size:clamp(24px,3.6vw,34px)}
+  .flap{
+    position:absolute;top:11px;left:11px;right:11px;height:58%;
+    background:linear-gradient(180deg,#F6EEDC,#E9DCC2);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center;transform:rotateX(180deg);
+    transition:transform .8s cubic-bezier(.4,.1,.2,1);z-index:3
+  }
+  .flap.shut{transform:rotateX(0deg)}
+  .postmark{
+    position:absolute;top:14%;right:8%;width:132px;height:132px;border-radius:50%;
+    border:5px solid var(--red);color:var(--red);z-index:4;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:var(--display);font-weight:800;letter-spacing:.1em;
+    transform:rotate(-18deg) scale(3);opacity:0
+  }
+  .postmark.hit{animation:hit .45s cubic-bezier(.2,.9,.3,1) forwards}
+  .postmark .l1{font-size:15px}
+  .postmark .l2{font-size:27px;line-height:1}
+  @keyframes hit{to{transform:rotate(-18deg) scale(1);opacity:.92}}
+  .delivered{display:none;color:var(--paper)}
+  .delivered.on{display:block;animation:rise .5s ease-out}
+  @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  .delivered .tick{font-size:clamp(60px,10vw,110px);line-height:1;color:#8FE3B4;font-weight:800}
+  .delivered h2{font-size:clamp(32px,5vw,54px);margin:.1em 0;font-weight:800}
+  .delivered p{font-size:clamp(20px,2.4vw,26px);color:#CFE6EE;margin:0 0 26px}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Writing · Future forms</div>
+    <h1>Send an email about your trip</h1>
+    <p class="sub">Two steps. Fix Caroline's email first, then write your own and send it.</p>
+  </header>
+
+  <section class="panel brief">
+    <h2>Your task</h2>
+    <p>Write an email to a friend or colleague about a real or imaginary trip you have planned, for work or for pleasure.</p>
+    <ul>
+      <li>Say <b>when</b> and <b>where</b> you are going, and <b>how</b> you are travelling.</li>
+      <li>Say <b>where you are staying</b>.</li>
+      <li>Give your <b>prediction for the weather</b>.</li>
+      <li>Talk about your <b>intentions and arrangements</b> for the visit.</li>
+    </ul>
+    <span class="target">Write 100–120 words</span>
+  </section>
+
+  <div class="rules">
+    <div class="rule">
+      <h3>Timetable</h3>
+      <p class="form">present simple</p>
+      <p>Trains, flights, opening hours — times someone else fixed.</p>
+      <div class="eg">The train <b>gets</b> in at 11 a.m.</div>
+    </div>
+    <div class="rule">
+      <h3>Arrangement</h3>
+      <p class="form">present continuous</p>
+      <p>You booked it, told people, put it in the diary.</p>
+      <div class="eg">We <b>'re staying</b> in the centre.</div>
+    </div>
+    <div class="rule">
+      <h3>Intention &amp; prediction</h3>
+      <p class="form">going to</p>
+      <p>What you plan to do, and what you think will happen.</p>
+      <div class="eg">It <b>'s going to be</b> cold.</div>
+    </div>
+  </div>
+
+  <!-- ================= STEP 1 ================= -->
+  <div class="step"><span class="num">1</span><h2>Read Caroline's email and fill the gaps</h2></div>
+  <p class="step-note">Use the verb in brackets. Press <b>?</b> if you want a clue — it gives you the rule, not the answer.</p>
+
+  <div class="airmail">
+    <div class="letter" id="letter1">
+      <div class="stamp" aria-hidden="true">
+        <div class="stamp-fill" id="stampFill"></div>
+        <div class="stamp-txt"><span class="big" id="stampNum">0/10</span><span class="small">Madrid</span></div>
+      </div>
+      <div id="body1"></div>
+    </div>
+  </div>
+
+  <div class="coach" id="coach1">Type a gap, then press Enter to check it.</div>
+
+  <div class="bar">
+    <button class="btn" id="check1">Check my answers</button>
+    <button class="btn ghost" id="clear1">Clear step 1</button>
+    <span class="status" id="score1">0 of 10 correct</span>
+  </div>
+
+  <!-- ================= STEP 2 ================= -->
+  <div class="step"><span class="num">2</span><h2>Now write your own email</h2></div>
+  <p class="step-note">Fill every blue box with your own trip. The word counter tells you when you are inside 100–120 words.</p>
+
+  <div class="airmail">
+    <div class="letter" id="letter2"><div id="body2"></div></div>
+  </div>
+
+  <div class="coach" id="coach2">Fill the boxes, then press Check my email.</div>
+  <ul class="report" id="report2"></ul>
+
+  <div class="bar">
+    <button class="btn" id="check2">Check my email</button>
+    <span class="count" id="wordCount">0 words — aim for 100–120</span>
+    <button class="btn ghost" id="clear2">Clear step 2</button>
+  </div>
+
+  <div class="bar">
+    <button class="btn send" id="send">Send email</button>
+    <span class="status" id="sendNote">Finish step 1 and fill every box in step 2.</span>
+  </div>
+</div>
+
+<!-- ================= SEND ANIMATION ================= -->
+<div id="stage" role="dialog" aria-live="polite" aria-label="Sending your email">
+  <div class="env-fly" id="envFly">
+    <div class="env">
+      <div class="env-air"></div>
+      <div class="env-face">
+        <div class="to">To:<b id="toName">your friend</b></div>
+      </div>
+      <div class="flap" id="flap"></div>
+      <div class="postmark" id="postmark"><span class="l1">AIRMAIL</span><span class="l2">SENT</span></div>
+    </div>
+  </div>
+
+  <div class="delivered" id="delivered">
+    <div class="tick">✓</div>
+    <h2>Delivered</h2>
+    <p id="deliveredNote">Your email is on its way.</p>
+    <button class="btn" id="again">Write another email</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- STEP 1 CONTENT ---------------- */
+  var P1 = [
+    [ {t:"Hello Paul,"} ],
+    [ {t:"Guess what! We "},
+      {g:{id:"g1",cue:"go",ans:["are going","are going to go"],
+          hint:"The trip is already decided and booked. Which form do we use for an arrangement?",
+          why:"Arrangement — present continuous: We're going."}},
+      {t:" to Madrid for a long weekend in December. We "},
+      {g:{id:"g2",cue:"take",ans:["are taking","are going to take"],
+          hint:"The train, the day and the time are all fixed. This is an arrangement.",
+          why:"Arrangement — present continuous: We're taking."}},
+      {t:" the high-speed train from Barcelona on Thursday 1st, and we "},
+      {g:{id:"g3",cue:"come",ans:["are coming","are going to come"],
+          hint:"Same trip, same diary. Keep the same form as the sentence before.",
+          why:"Arrangement — present continuous: We're coming back."}},
+      {t:" back home the following Monday. I expect it "},
+      {g:{id:"g4",cue:"be",ans:["is going to be"],
+          hint:"'I expect…' — Caroline is predicting the weather, not reading a timetable.",
+          why:"Prediction — going to: it's going to be cold."}},
+      {t:" cold there at this time of year, but I don't mind. There's so much to see and do in Madrid."} ],
+    [ {t:"The train "},
+      {g:{id:"g5",cue:"get",ans:["gets"],
+          hint:"A train time is a timetable. Nobody in this email decided it.",
+          why:"Timetable — present simple: The train gets in at 11 a.m."}},
+      {t:" to the city at 11 a.m., so we "},
+      {g:{id:"g6",cue:"leave",ans:["are going to leave"],
+          hint:"This is what Caroline plans to do when she arrives. It isn't booked.",
+          why:"Intention — going to: we're going to leave our bags."}},
+      {t:" our bags at the hotel and then explore. On Saturday we "},
+      {g:{id:"g7",cue:"go",ans:["are going","are going to go"],
+          hint:"The tickets are already booked, so this is in the diary.",
+          why:"Arrangement — present continuous: we're going to the exhibition."}},
+      {t:" to the Renoir exhibition — I've already booked the tickets. The exhibition "},
+      {g:{id:"g8",cue:"close",ans:["closes"],
+          hint:"Opening hours belong to the museum, not to Caroline.",
+          why:"Timetable — present simple: The exhibition closes at 8 p.m."}},
+      {t:" at 8 p.m., so we have plenty of time."} ],
+    [ {t:"We "},
+      {g:{id:"g9",cue:"stay",ans:["are staying","are going to stay"],
+          hint:"The hotel is booked. Diary again.",
+          why:"Arrangement — present continuous: We're staying in the centre."}},
+      {t:" right in the centre, and it "},
+      {g:{id:"g10",cue:"be",ans:["is going to be"],
+          hint:"Caroline is looking at the map and predicting how easy it will be.",
+          why:"Prediction — going to: it's going to be easy to walk."}},
+      {t:" easy to walk to lots of interesting places."} ],
+    [ {t:"Write soon and tell me your news."} ],
+    [ {t:"Best wishes,"} ],
+    [ {t:"Caroline", sign:true} ]
+  ];
+
+  /* ---------------- STEP 2 CONTENT ---------------- */
+  var P2 = [
+    [ {t:"Hello "}, {s:{id:"s1",ph:"friend's name",w:"11ch"}}, {t:","} ],
+    [ {t:"Guess what! I'm going to "}, {s:{id:"s2",ph:"place",w:"13ch"}},
+      {t:" for "}, {s:{id:"s3",ph:"how long",w:"12ch"}},
+      {t:" in "}, {s:{id:"s4",ph:"month",w:"10ch"}},
+      {t:". I'm travelling "}, {s:{id:"s5",ph:"e.g. by plane from Bangkok",w:"22ch"}},
+      {t:" on "}, {s:{id:"s6",ph:"day and date",w:"16ch"}},
+      {t:", and I'm coming back on "}, {s:{id:"s7",ph:"day and date",w:"16ch"}}, {t:"."} ],
+    [ {t:"I'm staying "}, {s:{id:"s8",ph:"e.g. at a small hotel near the river",w:"26ch"}},
+      {t:". I expect it's going to be "}, {s:{id:"s9",ph:"e.g. hot and humid",w:"18ch"}},
+      {t:" at that time of year, but I don't mind — there's so much to see and do."} ],
+    [ {t:"On "}, {s:{id:"s10",ph:"day",w:"10ch"}},
+      {t:" I'm "}, {s:{id:"s11",ph:"e.g. visiting the museum",w:"22ch"}},
+      {t:". I've already booked it. I'm also going to "}, {s:{id:"s12",ph:"e.g. try the street food",w:"20ch"}},
+      {t:", and I'm going to "}, {s:{id:"s13",ph:"e.g. take lots of photos",w:"20ch"}}, {t:"."} ],
+    [ {t:"Write soon and tell me your news."} ],
+    [ {t:"Best wishes,"} ],
+    [ {s:{id:"s14",ph:"your name",w:"12ch"}} ]
+  ];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var gaps = {}, slots = [];
+
+  /* ---------------- build step 1 ---------------- */
+  var b1 = $("body1");
+  P1.forEach(function(par){
+    var p = document.createElement("p");
+    if(par[0] && par[0].sign) p.className = "sign";
+    par.forEach(function(n){
+      if(n.t !== undefined){ p.appendChild(document.createTextNode(n.t)); return; }
+      var d = n.g, w = document.createElement("span");
+      w.className = "gap";
+      var inp = document.createElement("input");
+      inp.className = "blank"; inp.type = "text"; inp.autocomplete = "off";
+      inp.setAttribute("aria-label", "Gap: " + d.cue);
+      inp.style.width = "10ch";
+      var cue = document.createElement("span"); cue.className = "cue"; cue.textContent = "(" + d.cue + ")";
+      var mk = document.createElement("span"); mk.className = "mark"; mk.textContent = "";
+      var q = document.createElement("button"); q.className = "why"; q.type = "button";
+      q.textContent = "?"; q.title = "Clue"; q.setAttribute("aria-label","Clue for " + d.cue);
+      w.appendChild(inp); w.appendChild(cue); w.appendChild(mk); w.appendChild(q);
+      p.appendChild(w);
+      gaps[d.id] = {def:d, input:inp, mark:mk, ok:false};
+      inp.addEventListener("input", function(){ grow(inp,10); });
+      inp.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); judge(d.id,true); } });
+      inp.addEventListener("blur", function(){ if(inp.value.trim()) judge(d.id,false); });
+      q.addEventListener("click", function(){ say(d.hint, ""); });
+    });
+    b1.appendChild(p);
+  });
+
+  /* ---------------- build step 2 ---------------- */
+  var b2 = $("body2"), recs = [], recById = {};
+  P2.forEach(function(par){
+    var p = document.createElement("p");
+    par.forEach(function(n){
+      if(n.t !== undefined){ p.appendChild(document.createTextNode(n.t)); return; }
+      var d = n.s;
+      var w = document.createElement("span"); w.className = "gap";
+      var inp = document.createElement("input");
+      inp.className = "slot"; inp.type = "text"; inp.autocomplete = "off";
+      inp.placeholder = d.ph; inp.setAttribute("aria-label", d.ph);
+      inp.style.width = d.w; inp.dataset.base = d.w;
+      var mk = document.createElement("span"); mk.className = "mark"; mk.textContent = "";
+      w.appendChild(inp); w.appendChild(mk);
+      p.appendChild(w);
+
+      var rec = {id:d.id, ph:d.ph, input:inp, mark:mk, res:null};
+      recs.push(rec); recById[d.id] = rec; slots.push(inp);
+
+      inp.addEventListener("input", function(){
+        inp.classList.remove("no","warn");
+        mk.className = "mark"; mk.textContent = ""; rec.res = null;
+        grow(inp, parseFloat(d.w));
+        count();
+      });
+      inp.addEventListener("blur", function(){ if(inp.value.trim()) validate(rec, true); count(); });
+    });
+    b2.appendChild(p);
+  });
+
+  function grow(inp, base){
+    var n = Math.max(base, inp.value.length + 2);
+    inp.style.width = n + "ch";
+  }
+
+  /* ---------------- checking ---------------- */
+  function canon(s){
+    s = s.toLowerCase().replace(/[\u2018\u2019]/g, "'").trim();
+    s = s.replace(/\bwe're\b/g,"we are").replace(/\bit's\b/g,"it is").replace(/\bi'm\b/g,"i am");
+    s = s.replace(/'re\b/g," are").replace(/'s\b/g," is").replace(/'m\b/g," am").replace(/'ll\b/g," will");
+    s = s.replace(/[.,!?;]+$/,"");
+    s = s.replace(/\s+/g," ").trim();
+    s = s.replace(/^(we|it|i|the train|train|the exhibition|exhibition)\s+/,"");
+    return s.replace(/\s+/g," ").trim();
+  }
+
+  function nudge(v, d){
+    if(/\bwill\b/.test(v)) return "This unit practises present simple, present continuous and 'going to'. Try one of those three.";
+    if(/^going\b/.test(v)) return "Nearly — you need the verb 'be' first: am / is / are.";
+    if(v === d.cue) return "That's the plain present simple. Present simple is only for timetables here — is this a timetable?";
+    if(/^(am|is|are)$/.test(v)) return "Add the main verb after am / is / are.";
+    return d.hint;
+  }
+
+  function judge(id, loud){
+    var G = gaps[id], v = canon(G.input.value);
+    if(!v){ G.input.className = "blank"; G.mark.className = "mark"; G.mark.textContent = ""; G.ok = false; score(); return; }
+    var hit = G.def.ans.indexOf(v) > -1;
+    G.ok = hit;
+    G.input.className = "blank " + (hit ? "ok" : "no");
+    G.mark.className = "mark " + (hit ? "ok" : "no");
+    G.mark.textContent = hit ? "✓" : "✗";
+    if(loud || !hit) say(hit ? G.def.why : nudge(v, G.def), hit ? "ok" : "no");
+    score();
+  }
+
+  function say(msg, kind){
+    var c = $("coach1");
+    c.className = "coach" + (kind ? " " + kind : "");
+    c.textContent = msg;
+  }
+
+  function score(){
+    var done = 0, total = 0;
+    for(var k in gaps){ total++; if(gaps[k].ok) done++; }
+    $("score1").textContent = done + " of " + total + " correct";
+    $("score1").className = "status" + (done === total ? " ok" : "");
+    $("stampNum").textContent = done + "/" + total;
+    $("stampFill").style.height = (done / total * 100) + "%";
+    gate();
+    return done === total;
+  }
+
+  $("check1").addEventListener("click", function(){
+    var blank = 0;
+    for(var k in gaps){ if(!gaps[k].input.value.trim()) blank++; else judge(k,false); }
+    if(blank) say(blank + " gap" + (blank>1?"s are":" is") + " still empty. Fill them in, then check again.","no");
+    else if(score()) say("All ten correct. Move on to step 2 and write your own email.","ok");
+    else say("Look at the red crosses. Change those answers and check again.","no");
+  });
+
+  $("clear1").addEventListener("click", function(){
+    for(var k in gaps){
+      var G = gaps[k];
+      G.input.value = ""; G.input.className = "blank"; G.input.style.width = "10ch";
+      G.mark.className = "mark"; G.mark.textContent = ""; G.ok = false;
+    }
+    say("Step 1 is empty again. Type a gap, then press Enter to check it.","");
+    score();
+  });
+
+  $("clear2").addEventListener("click", function(){
+    recs.forEach(function(r){
+      r.input.value = ""; r.input.classList.remove("no","warn"); r.input.style.width = r.input.dataset.base;
+      r.mark.className = "mark"; r.mark.textContent = ""; r.res = null;
+    });
+    $("report2").innerHTML = "";
+    $("coach2").className = "coach";
+    $("coach2").textContent = "Fill the boxes, then press Check my email.";
+    count();
+  });
+
+  $("check2").addEventListener("click", function(){
+    checkAll(true);
+    var firstBad = recs.filter(function(r){ return r.res && r.res.level === "no"; })[0];
+    if(firstBad) firstBad.input.focus();
+  });
+
+  /* ---------------- STEP 2 ACCURACY CHECKS ---------------- */
+  var MONTHS = /^(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)$/;
+  var DAYS = /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)\b/;
+  var TRANSPORT = /\b(plane|flight|aeroplane|airplane|train|bus|coach|car|taxi|ferry|boat|ship|bike|bicycle|motorbike|scooter|van|minibus|metro|subway|underground|mrt|bts|skytrain|tuk-tuk|foot|air)\b/;
+  var STAY = /\b(hotel|hostel|guesthouse|guest|resort|apartment|flat|house|home|room|airbnb|dorm|dormitory|campsite|camp|tent|villa|inn|lodge|homestay|friend|friend's|cousin|aunt|uncle|parents|family|sister|brother)\b/;
+  var WEATHER_ADJ = /\b(hot|warm|cool|cold|chilly|freezing|mild|wet|dry|humid|sticky|rainy|sunny|cloudy|windy|stormy|snowy|foggy|boiling|pleasant|lovely|nice|grey|gray|bright|damp|muggy)\b/;
+  var WEATHER_NOUN = /\b(rain|snow|sun|wind|storm|heat|fog|cloud|humidity)\b/;
+
+  function first(v){ return v.trim().split(/\s+/)[0].toLowerCase().replace(/[.,]$/,""); }
+  function cap(v){ return /^[A-Z]/.test(v.trim()); }
+
+  var CHECKS = {
+    s1: function(v){ if(!cap(v)) return warn("Start a person's name with a capital letter."); },
+    s2: function(v){ if(!cap(v)) return warn("Places take a capital letter: Chiang Mai, Japan, Berlin."); },
+    s3: function(v){
+      if(!/\b(day|days|night|nights|week|weeks|weekend|month|months|fortnight)\b/i.test(v))
+        return bad("Say how long the trip is: 'five days', 'a long weekend', 'two weeks'.");
+    },
+    s4: function(v){ if(!MONTHS.test(v.trim().toLowerCase().replace(/[.]/g,""))) return bad("Write one month: January, February, March…"); },
+    s5: function(v){
+      if(!TRANSPORT.test(v.toLowerCase())) return bad("Say how you travel: 'by plane from Bangkok', 'on the night train'.");
+      if(!/\b(by|on|with|in)\b/i.test(v)) return warn("Transport usually needs a preposition: by plane, on the train.");
+    },
+    s6: function(v){
+      if(!DAYS.test(v.toLowerCase()) && !/\d/.test(v)) return bad("Give a day or a date: 'Friday 12th' or 'Saturday 3 October'.");
+      if(DAYS.test(v.toLowerCase()) && !cap(v)) return warn("Days of the week take a capital letter.");
+    },
+    s7: function(v){
+      if(!DAYS.test(v.toLowerCase()) && !/\d/.test(v)) return bad("Give a day or a date for coming home too.");
+      if(v.trim().toLowerCase() === (recById.s6.input.value.trim().toLowerCase()))
+        return warn("You leave and come back on the same day — check your dates.");
+    },
+    s8: function(v){
+      if(!/^(at|in|with|on|near|beside|next)\b/i.test(v.trim()))
+        return bad("Start with a preposition: 'at a small hotel', 'with my cousin', 'in an apartment'.");
+      if(!STAY.test(v.toLowerCase())) return warn("Name the place you sleep: a hotel, a hostel, a friend's house.");
+    },
+    s9: function(v){
+      var t = v.toLowerCase();
+      if(!WEATHER_ADJ.test(t) && WEATHER_NOUN.test(t))
+        return bad("After 'it's going to be' you need an adjective: rainy, not rain; sunny, not sun.");
+      if(!WEATHER_ADJ.test(t)) return bad("Predict the weather with an adjective: hot, humid, cool, windy, rainy.");
+    },
+    s10: function(v){
+      if(!DAYS.test(v.toLowerCase())) return bad("Write a day of the week: On Saturday…");
+      if(!cap(v)) return warn("Days of the week take a capital letter.");
+    },
+    s11: function(v){
+      var f = first(v);
+      if(f === "going") return bad("'I'm going to' is an intention. This one is booked, so use an -ing verb: 'I'm visiting…'.");
+      if(f === "to") return bad("After 'I'm' the verb takes -ing, not 'to': 'I'm meeting…'.");
+      if(!/ing$/.test(f)) return bad("This is an arrangement, so after 'I'm' use an -ing verb: visiting, meeting, taking.");
+    },
+    s12: function(v){ return intent(v); },
+    s13: function(v){
+      var r = intent(v); if(r) return r;
+      if(v.trim().toLowerCase() === recById.s12.input.value.trim().toLowerCase())
+        return warn("Your two intentions are the same. Give the reader something new.");
+    },
+    s14: function(v){ if(!cap(v)) return warn("Sign off with a capital letter on your name."); }
+  };
+
+  function intent(v){
+    var f = first(v);
+    if(f === "to") return bad("Don't repeat 'to' — the sentence already has it: 'I'm going to visit…'.");
+    if(/ing$/.test(f)) return bad("After 'going to' use the base verb: 'try', not 'trying'.");
+    if(/ed$/.test(f)) return bad("After 'going to' use the base verb, not the past: 'visit', not 'visited'.");
+    if(/^(is|am|are|was|were)$/.test(f)) return bad("After 'going to' start with a main verb: try, visit, buy, take.");
+  }
+  function bad(m){ return {level:"no", msg:m}; }
+  function warn(m){ return {level:"warn", msg:m}; }
+
+  function validate(rec, show){
+    var v = rec.input.value;
+    if(!v.trim()){ rec.res = {level:"no", msg:"This box is still empty."}; }
+    else{
+      var fn = CHECKS[rec.id];
+      rec.res = (fn && fn(v)) || {level:"ok", msg:""};
+    }
+    if(show) paint(rec);
+    return rec.res;
+  }
+
+  function paint(rec){
+    var lv = rec.res ? rec.res.level : "";
+    rec.input.classList.remove("no","warn");
+    if(lv === "no") rec.input.classList.add("no");
+    if(lv === "warn") rec.input.classList.add("warn");
+    rec.mark.className = "mark" + (lv ? " " + lv : "");
+    rec.mark.textContent = lv === "ok" ? "✓" : lv === "no" ? "✗" : lv === "warn" ? "!" : "";
+  }
+
+  function checkAll(show){
+    var hard = 0, soft = 0, list = [];
+    recs.forEach(function(r){
+      var res = validate(r, show);
+      if(res.level === "no"){ hard++; list.push(r); }
+      else if(res.level === "warn"){ soft++; list.push(r); }
+    });
+    if(show) report(list, hard, soft);
+    return {hard:hard, soft:soft};
+  }
+
+  function report(list, hard, soft){
+    var ul = $("report2"), c = $("coach2");
+    ul.innerHTML = "";
+    list.forEach(function(r){
+      var li = document.createElement("li");
+      li.className = r.res.level;
+      li.innerHTML = '<b>' + r.ph + '</b> — ' + r.res.msg;
+      li.tabIndex = 0;
+      var go = function(){ r.input.focus(); r.input.select(); };
+      li.addEventListener("click", go);
+      li.addEventListener("keydown", function(e){ if(e.key === "Enter") go(); });
+      ul.appendChild(li);
+    });
+    var words = wordTotal();
+    if(words < 100 || words > 120){
+      var li2 = document.createElement("li");
+      li2.className = "warn";
+      li2.innerHTML = '<b>Length</b> — ' + words + ' words. The task asks for 100–120, so ' +
+        (words < 100 ? 'add a little more detail.' : 'cut a few words.');
+      ul.appendChild(li2);
+    }
+    if(hard){
+      c.className = "coach no";
+      c.textContent = hard + (hard > 1 ? " things need fixing" : " thing needs fixing") +
+        (soft ? " and " + soft + " to look at again." : ". Tap a line below to jump to it.");
+    }else if(soft){
+      c.className = "coach";
+      c.textContent = "The grammar is right. " + soft + (soft > 1 ? " points" : " point") + " to look at again — tap a line to jump to it.";
+    }else{
+      c.className = "coach ok";
+      c.textContent = "Accurate. Every box uses the right form — you can send it.";
+    }
+  }
+
+
+  /* ---------------- word count ---------------- */
+  function fullText(){
+    var txt = "";
+    (function walk(node){
+      node.childNodes.forEach(function(n){
+        if(n.nodeType === 3) txt += n.nodeValue;
+        else if(n.tagName === "INPUT") txt += " " + n.value + " ";
+        else{ walk(n); if(n.tagName === "P") txt += " "; }
+      });
+    })(b2);
+    return txt;
+  }
+
+  function wordTotal(){
+    return fullText().replace(/[\u2014\u2013]/g," ").split(/\s+/)
+      .filter(function(w){ return /[A-Za-z0-9]/.test(w); }).length;
+  }
+
+  function count(){
+    var words = wordTotal(), e = $("wordCount"), inRange = words >= 100 && words <= 120;
+    e.textContent = words + " words — " + (inRange ? "inside 100–120 ✓" : "aim for 100–120");
+    e.className = "count" + (inRange ? " in" : "");
+    gate();
+  }
+
+  function filled(){
+    return slots.every(function(i){ return i.value.trim().length > 0; });
+  }
+
+  function gate(){
+    var done = true;
+    for(var k in gaps){ if(!gaps[k].ok) done = false; }
+    var accurate = checkAll(false).hard === 0;
+    var ready = done && filled() && accurate;
+    $("send").disabled = !ready;
+    $("sendNote").className = "status" + (ready ? " ok" : "");
+    $("sendNote").textContent = ready ? "Ready to send." :
+      (!done ? "Finish step 1 first — every gap needs a green ✓." :
+       !filled() ? "Fill every blue box in step 2." :
+       "Check your email — some boxes still have a ✗.");
+  }
+
+
+  /* ---------------- send animation ---------------- */
+  var timers = [];
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  $("send").addEventListener("click", function(){
+    var res = checkAll(true);
+    if(res.hard){
+      var firstBad = recs.filter(function(r){ return r.res && r.res.level === "no"; })[0];
+      if(firstBad){ firstBad.input.focus(); firstBad.input.select(); }
+      $("coach2").scrollIntoView({behavior:"smooth", block:"center"});
+      return;
+    }
+
+    var name = slots[0].value.trim() || "your friend";
+    $("toName").textContent = name;
+    var words = wordTotal();
+    $("deliveredNote").textContent = "Your email to " + name + " is on its way — " + words + " words.";
+
+    var stage = $("stage"), fly = $("envFly"), flap = $("flap"), pm = $("postmark"), dv = $("delivered");
+    stage.classList.add("on"); fly.style.display = "block";
+    flap.classList.remove("shut"); pm.classList.remove("hit"); fly.classList.remove("fly"); dv.classList.remove("on");
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    clearTimers();
+    if(reduce){
+      timers.push(setTimeout(function(){ fly.style.display = "none"; dv.classList.add("on"); $("again").focus(); }, 300));
+      return;
+    }
+    timers.push(setTimeout(function(){ flap.classList.add("shut"); }, 450));
+    timers.push(setTimeout(function(){ pm.classList.add("hit"); }, 1350));
+    timers.push(setTimeout(function(){ fly.classList.add("fly"); }, 2050));
+    timers.push(setTimeout(function(){ fly.style.display = "none"; dv.classList.add("on"); $("again").focus(); }, 3450));
+  });
+
+  $("again").addEventListener("click", function(){
+    $("stage").classList.remove("on");
+    $("clear2").click();
+    slots[0].focus();
+    window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});
+  });
+
+  count(); score();
+})();
+</script>
