@@ -1,5 +1,10 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E5468">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airmail">
 <title>Airmail — Writing an email about a trip</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -259,6 +264,30 @@
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms!important;transition-duration:.01ms!important}
   }
+
+  /* ---------- phones ---------- */
+  body{overflow-x:hidden}
+  input.blank,input.slot{max-width:100%}
+  @media (max-width:760px){
+    body{font-size:18px;padding-bottom:56px}
+    .wrap{padding:0 14px}
+    header{padding:26px 0 4px}
+    .panel{padding:20px 18px;margin:18px 0}
+    .letter{padding:22px 18px;font-size:21px;line-height:1.95}
+    .gap{white-space:normal}
+    input.blank,input.slot{font-size:20px;max-width:70vw;padding:2px 6px}
+    .bar{flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+    .bar .btn{width:100%}
+    .bar .status,.bar .count{text-align:center}
+    .rules{gap:12px}
+    .report li{padding:12px 14px}
+    .stamp{width:92px;height:114px}
+    .stamp-txt .big{font-size:25px}
+  }
+  @media (max-width:400px){
+    .letter{font-size:20px}
+    input.blank,input.slot{max-width:78vw}
+  }
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 
@@ -266,7 +295,7 @@
   <header>
     <div class="eyebrow">Writing · Future forms</div>
     <h1>Send an email about your trip</h1>
-    <p class="sub">Two steps. Fix Caroline's email first, then write your own and send it.</p>
+    <p class="sub">Two steps. Fix Ploy's email first, then write your own and send it.</p>
   </header>
 
   <section class="panel brief">
@@ -303,14 +332,14 @@
   </div>
 
   <!-- ================= STEP 1 ================= -->
-  <div class="step"><span class="num">1</span><h2>Read Caroline's email and fill the gaps</h2></div>
+  <div class="step"><span class="num">1</span><h2>Read Ploy's email and fill the gaps</h2></div>
   <p class="step-note">Use the verb in brackets. Press <b>?</b> if you want a clue — it gives you the rule, not the answer.</p>
 
   <div class="airmail">
     <div class="letter" id="letter1">
       <div class="stamp" aria-hidden="true">
         <div class="stamp-fill" id="stampFill"></div>
-        <div class="stamp-txt"><span class="big" id="stampNum">0/10</span><span class="small">Madrid</span></div>
+        <div class="stamp-txt"><span class="big" id="stampNum">0/10</span><span class="small">Chiang Mai</span></div>
       </div>
       <div id="body1"></div>
     </div>
@@ -374,53 +403,53 @@
 
   /* ---------------- STEP 1 CONTENT ---------------- */
   var P1 = [
-    [ {t:"Hello Paul,"} ],
+    [ {t:"Hello Nok,"} ],
     [ {t:"Guess what! We "},
       {g:{id:"g1",cue:"go",ans:["are going","are going to go"],
           hint:"The trip is already decided and booked. Which form do we use for an arrangement?",
           why:"Arrangement — present continuous: We're going."}},
-      {t:" to Madrid for a long weekend in December. We "},
+      {t:" to Chiang Mai for five days in November. We "},
       {g:{id:"g2",cue:"take",ans:["are taking","are going to take"],
-          hint:"The train, the day and the time are all fixed. This is an arrangement.",
+          hint:"The bus, the day and the seats are all fixed. This is an arrangement.",
           why:"Arrangement — present continuous: We're taking."}},
-      {t:" the high-speed train from Barcelona on Thursday 1st, and we "},
+      {t:" the overnight bus from Bangkok on Friday 14th, and we "},
       {g:{id:"g3",cue:"come",ans:["are coming","are going to come"],
           hint:"Same trip, same diary. Keep the same form as the sentence before.",
-          why:"Arrangement — present continuous: We're coming back."}},
-      {t:" back home the following Monday. I expect it "},
+          why:"Arrangement — present continuous: We're coming home."}},
+      {t:" home the following Wednesday. I expect it "},
       {g:{id:"g4",cue:"be",ans:["is going to be"],
-          hint:"'I expect…' — Caroline is predicting the weather, not reading a timetable.",
-          why:"Prediction — going to: it's going to be cold."}},
-      {t:" cold there at this time of year, but I don't mind. There's so much to see and do in Madrid."} ],
-    [ {t:"The train "},
+          hint:"'I expect…' — Ploy is predicting the weather, not reading a timetable.",
+          why:"Prediction — going to: it's going to be cool."}},
+      {t:" cool up in the mountains, but I don't mind. There's so much to see and do in the old city."} ],
+    [ {t:"The bus "},
       {g:{id:"g5",cue:"get",ans:["gets"],
-          hint:"A train time is a timetable. Nobody in this email decided it.",
-          why:"Timetable — present simple: The train gets in at 11 a.m."}},
-      {t:" to the city at 11 a.m., so we "},
+          hint:"A bus time is a timetable. Nobody in this email decided it.",
+          why:"Timetable — present simple: The bus gets in at 6 a.m."}},
+      {t:" in at 6 a.m., so we "},
       {g:{id:"g6",cue:"leave",ans:["are going to leave"],
-          hint:"This is what Caroline plans to do when she arrives. It isn't booked.",
+          hint:"This is what Ploy plans to do when she arrives. It isn't booked.",
           why:"Intention — going to: we're going to leave our bags."}},
-      {t:" our bags at the hotel and then explore. On Saturday we "},
+      {t:" our bags at the guesthouse and find some breakfast. On Sunday we "},
       {g:{id:"g7",cue:"go",ans:["are going","are going to go"],
-          hint:"The tickets are already booked, so this is in the diary.",
-          why:"Arrangement — present continuous: we're going to the exhibition."}},
-      {t:" to the Renoir exhibition — I've already booked the tickets. The exhibition "},
+          hint:"The place on the tour is already booked, so this is in the diary.",
+          why:"Arrangement — present continuous: we're going to the flower festival."}},
+      {t:" to the flower festival — I've already booked a place on the tour. The night market "},
       {g:{id:"g8",cue:"close",ans:["closes"],
-          hint:"Opening hours belong to the museum, not to Caroline.",
-          why:"Timetable — present simple: The exhibition closes at 8 p.m."}},
-      {t:" at 8 p.m., so we have plenty of time."} ],
+          hint:"Opening hours belong to the market, not to Ploy.",
+          why:"Timetable — present simple: The market closes at 10 p.m."}},
+      {t:" at 10 p.m., so we have plenty of time."} ],
     [ {t:"We "},
       {g:{id:"g9",cue:"stay",ans:["are staying","are going to stay"],
-          hint:"The hotel is booked. Diary again.",
-          why:"Arrangement — present continuous: We're staying in the centre."}},
-      {t:" right in the centre, and it "},
+          hint:"The guesthouse is booked. Diary again.",
+          why:"Arrangement — present continuous: We're staying near the gate."}},
+      {t:" near Tha Phae Gate, and it "},
       {g:{id:"g10",cue:"be",ans:["is going to be"],
-          hint:"Caroline is looking at the map and predicting how easy it will be.",
+          hint:"Ploy is looking at the map and predicting how easy it will be.",
           why:"Prediction — going to: it's going to be easy to walk."}},
-      {t:" easy to walk to lots of interesting places."} ],
+      {t:" easy to walk to the temples."} ],
     [ {t:"Write soon and tell me your news."} ],
     [ {t:"Best wishes,"} ],
-    [ {t:"Caroline", sign:true} ]
+    [ {t:"Ploy", sign:true} ]
   ];
 
   /* ---------------- STEP 2 CONTENT ---------------- */
@@ -458,6 +487,10 @@
       w.className = "gap";
       var inp = document.createElement("input");
       inp.className = "blank"; inp.type = "text"; inp.autocomplete = "off";
+      inp.setAttribute("autocapitalize","none");
+      inp.setAttribute("autocorrect","off");
+      inp.setAttribute("spellcheck","false");
+      inp.setAttribute("enterkeyhint","done");
       inp.setAttribute("aria-label", "Gap: " + d.cue);
       inp.style.width = "10ch";
       var cue = document.createElement("span"); cue.className = "cue"; cue.textContent = "(" + d.cue + ")";
@@ -485,6 +518,10 @@
       var w = document.createElement("span"); w.className = "gap";
       var inp = document.createElement("input");
       inp.className = "slot"; inp.type = "text"; inp.autocomplete = "off";
+      inp.setAttribute("autocorrect","off");
+      inp.setAttribute("enterkeyhint","next");
+      inp.setAttribute("autocapitalize",
+        /^(s1|s2|s4|s6|s7|s10|s14)$/.test(d.id) ? "words" : "none");
       inp.placeholder = d.ph; inp.setAttribute("aria-label", d.ph);
       inp.style.width = d.w; inp.dataset.base = d.w;
       var mk = document.createElement("span"); mk.className = "mark"; mk.textContent = "";
@@ -506,7 +543,7 @@
   });
 
   function grow(inp, base){
-    var n = Math.max(base, inp.value.length + 2);
+    var n = Math.max(base, Math.min(inp.value.length + 2, 30));
     inp.style.width = n + "ch";
   }
 
